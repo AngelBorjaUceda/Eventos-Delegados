@@ -1,0 +1,23 @@
+th{
+   background-color: blueviolet;
+   color: cornsilk;
+}
+ul{
+   list-style: none;
+}
+ th, td {
+    vertical-align: top;
+    border: 1px solid #000;
+ }
+.foto{
+   width: 50%; 
+   border: 5% solid black; 
+   float: left;
+ }
+.data{
+   float: left;
+   width: 50%; 
+}
+table{
+   border-collapse: collapse;
+ }

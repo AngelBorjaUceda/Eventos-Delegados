@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejercicio: eventos delegados</title>
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Lista de Álbumnes</h2>
+
+    <div class="listaalbum">
+        <select class="album">
+            <option>Elige uno álbum</option>
+        </select>
+    </div>
+
+
+    <div class="data">
+        <h3>Lista de los posts</h3>
+        <table class="tabla">
+            <tr>
+                <th>USER ID</th> <th>ID</th> <th>TITLLE</th> <th>BODY</th>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <div id="foto" class="foto">
+        <ul class="foto">
+        </ul>
+    </div>
+    
+</body>
+
+
+<script>
+
+
+    $(function(){
+
+            $.ajax("https://jsonplaceholder.typicode.com/albums", {
+       
+                dataType : "json",
+
+                success: function(data){
+
+                    data.forEach(function(valor) {
+
+                            $(".album").append("<option value = " + valor.id + " class = 'titulo'>"+valor.title+" </option>");
+
+                            
+                    });
+                },
+
+                error: function(jqXHR,texStatus,error){
+
+                    alert("Error : "+texStatus+" "+error)
+
+                }
+            });
+
+
+            $(".listaalbum").on("change" ,"select" , function(event){
+                
+                let number = $(this).val();
+
+                $.ajax("https://jsonplaceholder.typicode.com/photos?albumId=" + number,{
+                    dataType: "json",
+                    success: function(data){
+                        console.log("OK");
+                        $("ul.foto").html("")
+                            for(i = 0; i < 3 ; i++){
+
+                             $("ul.foto").append("<li class='elemento'> <img src='" + data[i].thumbnailUrl + "' /> </li>");
+
+                            }
+                    },
+                    error:function(jqXHR, texStatus, error){
+
+                        alert("Error: " + texStatus + " " + error);
+
+                    }
+                })
+            });
+
+            
+
+
+            $(".data table").on("click", "tr", function(event){
+                let number = $(this).children("td").eq(0).text();
+                let urlfinal = "https://jsonplaceholder.typicode.com/users?id=" + number;
+
+                $.ajax(urlfinal , {
+                    dataType: "json",
+
+                    success: function(data){
+
+                        let nombre = data[0].name;
+                        let usuario = data[0].username;
+                        let correo = data[0].email;
+                        
+                        alert(" Nombre: " + nombre + ", Usuario: " + usuario + ", Correo: "+ correo);
+                    },
+                    error:function(jqXHR, texStatus, error){
+
+                        alert("Error:" + texStatus + " " + error);
+                    }
+                });
+            });
+
+            $.ajax("https://jsonplaceholder.typicode.com/posts",{
+                dataType: "json",
+                success: function(data){
+
+                    var count = 19;
+                        for( var i in data){
+                            if(i > count)
+                                break;
+
+                                var elemento = data[i];
+                                $(".tabla").append("<tr class = 'alert'> <td>" + elemento.userId + "</td> <td>" +elemento.id+ "</td> <td>" + elemento.title + "</td> <td>" +elemento.body +  "</tr>");
+                           
+                    }
+                }
+            });
+
+
+            
+    });
+
+
+</script>
+</html>
+
+
